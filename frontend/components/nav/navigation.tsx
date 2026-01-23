@@ -1,6 +1,7 @@
 "use client";
-import { Key, Home, NotebookPen, Search } from "lucide-react";
+import { Key, Home, NotebookPen, Search, LogOut } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
     NavigationMenu,
     NavigationMenuItem,
@@ -9,15 +10,26 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/AppContextProvider";
 
 export default function Navigation() {
     const pathname = usePathname();
+    const router = useRouter();
+    const { isAuthenticated, logout } = useAuth();
+
     const navigationMenuItems = [
         { title: "Home", href: "/", icon: Home },
-        { title: "Login", href: "/login", icon: Key },
-        { title: "Register", href: "/register", icon: NotebookPen },
+        ...(isAuthenticated ? [] : [
+            { title: "Login", href: "/login", icon: Key },
+            { title: "Register", href: "/register", icon: NotebookPen },
+        ]),
         { title: "Search", href: "#", icon: Search },
     ];
+
+    const handleLogout = async () => {
+        await logout();
+        router.push("/login");
+    };
 
     return (<div className="flex w-full flex-col items-center p-4 bg-red-400 dark:bg-black sm:items-start">
         <NavigationMenu>
@@ -44,6 +56,17 @@ export default function Navigation() {
                         </NavigationMenuItem>
                     )
                 })}
+                {isAuthenticated && (
+                    <NavigationMenuItem>
+                        <button
+                            onClick={handleLogout}
+                            className={navigationMenuTriggerStyle()}
+                        >
+                            <LogOut className="h-5 w-5 shrink-0" />
+                            Logout
+                        </button>
+                    </NavigationMenuItem>
+                )}
             </NavigationMenuList>
         </NavigationMenu>
     </div>)
