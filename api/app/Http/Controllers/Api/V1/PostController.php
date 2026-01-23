@@ -19,6 +19,7 @@ class PostController extends ApiController
             ->allowedFilters(['title', 'status']) // Allow clients to filter results by 'title' or 'status' fields via query parameters
             ->allowedSorts(['title', 'created_at'])  // Allow clients to sort results by 'title' or 'created_at' fields via query parameters
             ->allowedIncludes(['author', 'comments']) // Allow clients to include related data like 'author' (user) or 'comments' via query parameters
+            ->orderBy('created_at', 'desc') // sort by descending order
             ->paginate();  // Paginate the results (default 15 items per page, or customizable via per_page parameter)
 
         return $this->success(PostResource::collection($posts->load('user'))); // Return the paginated posts transformed through PostResource and wrapped in success response

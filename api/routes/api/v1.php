@@ -29,11 +29,11 @@ Route::middleware(['auth:sanctum', 'throttle:authenticated'])->group(function ()
 
 
 //? This kind of method can be used if you want to keep public methods (index, show) outside the protected group
-// ! Route::get('posts', [PostController::class, 'index']);
-// ! Route::get('posts/{post}', [PostController::class, 'show']);
+Route::get('posts', [PostController::class, 'index']);
+Route::get('posts/{post}', [PostController::class, 'show']);
 
 // Protected: resource excluding public methods
 Route::middleware('auth:sanctum')->group(function () {
     //? The except(['index', 'show']) method can be used here to exclude the methods that you want to keep public
-    Route::apiResource('posts', PostController::class)/* ->except(['index', 'show']) */;
+    Route::apiResource('posts', PostController::class)->except(['index', 'show']);
 });
