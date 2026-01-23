@@ -1,5 +1,22 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from "axios";
 
+// Helper function to set auth token in both localStorage and cookies
+const setAuthToken = (token: string) => {
+  localStorage.setItem("auth_token", token);
+  // Also set as cookie for middleware access
+  if (typeof window !== "undefined") {
+    document.cookie = `auth_token=${token}; path=/; max-age=${7 * 24 * 60 * 60}`; // 7 days
+  }
+};
+
+// Helper function to remove auth token
+const removeAuthToken = () => {
+  localStorage.removeItem("auth_token");
+  if (typeof window !== "undefined") {
+    document.cookie = "auth_token=; path=/; max-age=0"; // Delete cookie
+  }
+};
+
 // Create axios instance with base URL from environment
 const apiClient: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -35,13 +52,17 @@ apiClient.interceptors.response.use(
     // Handle common error scenarios
     if (error.response?.status === 401) {
       // Handle unauthorized - could redirect to login
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("auth_token");
-      }
+      removeAuthToken();
     }
     return Promise.reject(error);
   },
 );
+
+// Export helper functions for use in the app
+export const authTokenUtils = {
+  setToken: setAuthToken,
+  removeToken: removeAuthToken,
+};
 
 // Generic API methods
 export const api = {
