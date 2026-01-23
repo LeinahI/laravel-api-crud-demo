@@ -45,19 +45,19 @@ apiClient.interceptors.response.use(
 
 // Generic API methods
 export const api = {
-  get: <T = any>(url: string, config?: AxiosRequestConfig) =>
+  get: <T = Array<string>>(url: string, config?: AxiosRequestConfig) =>
     apiClient.get<T>(url, config),
 
-  post: <T = any>(url: string, data?: any, config?: AxiosRequestConfig) =>
+  post: <T = Array<string>>(url: string, data?: Array<string | number>, config?: AxiosRequestConfig) =>
     apiClient.post<T>(url, data, config),
 
-  put: <T = any>(url: string, data?: any, config?: AxiosRequestConfig) =>
+  put: <T = Array<string>>(url: string, data?: Array<string | number>, config?: AxiosRequestConfig) =>
     apiClient.put<T>(url, data, config),
 
-  patch: <T = any>(url: string, data?: any, config?: AxiosRequestConfig) =>
+  patch: <T = Array<string>>(url: string, data?: Array<string | number>, config?: AxiosRequestConfig) =>
     apiClient.patch<T>(url, data, config),
 
-  delete: <T = any>(url: string, config?: AxiosRequestConfig) =>
+  delete: <T = Array<string>>(url: string, config?: AxiosRequestConfig) =>
     apiClient.delete<T>(url, config),
 };
 
