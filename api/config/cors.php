@@ -39,6 +39,6 @@ return [
 
     'max_age' => 86400, // 24 hours
 
-    'supports_credentials' => false,
+    'supports_credentials' => true, // true if you want to allow cookies and auth headers with CORS requests
 
 ];
