@@ -21,6 +21,12 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+    password_confirmation: string
+  ) => Promise<void>;
   isAuthenticated: boolean;
 }
 
@@ -75,6 +81,34 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
     []
   );
 
+  const register = useCallback(
+    async (name: string, email: string, password: string, password_confirmation: string) => {
+      try {
+        setLoading(true);
+        // Call register endpoint
+        if (password !== password_confirmation) {
+          throw new Error("Passwords do not match");
+        }
+        const response = await api.post<{ token: string; user: User }>(
+          '/register',
+          { name, email, password, password_confirmation }
+        );
+
+        // Store token in localStorage and cookies
+        authTokenUtils.setToken(response.data.token);
+
+        // Set user in state
+        setUser(response.data.user);
+      } catch (error) {
+        console.error('Registration failed:', error);
+        throw error;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
   const logout = useCallback(async () => {
     try {
       // Call logout endpoint to invalidate token on backend
@@ -95,6 +129,7 @@ export function AppContextProvider({ children }: { children: ReactNode }) {
         loading,
         login,
         logout,
+        register,
         isAuthenticated: !!user,
       }}
     >

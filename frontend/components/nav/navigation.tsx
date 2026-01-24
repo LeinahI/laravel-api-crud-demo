@@ -1,5 +1,5 @@
 "use client";
-import { Key, Home, NotebookPen, Search, LogOut } from "lucide-react";
+import { Key, Home, NotebookPen, Search, LogOut, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -19,11 +19,14 @@ export default function Navigation() {
 
     const navigationMenuItems = [
         { title: "Home", href: "/", icon: Home },
-        ...(isAuthenticated ? [] : [
+        ...(isAuthenticated ? [
+            { title: "Profile", href: "/me", icon: User },
+            { title: "Create Post", href: "/post/create", icon: NotebookPen },
+        ] : [
             { title: "Login", href: "/login", icon: Key },
             { title: "Register", href: "/register", icon: NotebookPen },
         ]),
-        { title: "Search", href: "#", icon: Search },
+        { title: "Search", href: "/search", icon: Search },
     ];
 
     const handleLogout = async () => {
@@ -57,6 +60,7 @@ export default function Navigation() {
                     )
                 })}
                 {isAuthenticated && (
+                    <>
                     <NavigationMenuItem>
                         <button
                             onClick={handleLogout}
@@ -66,6 +70,7 @@ export default function Navigation() {
                             Logout
                         </button>
                     </NavigationMenuItem>
+                    </>
                 )}
             </NavigationMenuList>
         </NavigationMenu>

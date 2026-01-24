@@ -1,7 +1,7 @@
 
 "use client";
 import { EyeIcon, EyeOffIcon, LockIcon, MailIcon } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
     InputGroup,

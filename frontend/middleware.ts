@@ -7,10 +7,10 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('auth_token')?.value;
 
   // Public routes that should redirect authenticated users
-  const publicAuthRoutes = ['/login', '/register'];
+  const publicAuthRoutes = ['/login', '/register',];
   
   // Protected routes that require authentication
-  const protectedRoutes = ['/me'];
+  const protectedRoutes = ['/me', '/post/create'];
 
   // Check if current path is a public auth route
   const isPublicAuthRoute = publicAuthRoutes.includes(pathname);
